@@ -102,17 +102,83 @@ void tampilSuhu(byte x, byte y)
   byte riil = suhu;
   byte cacah = (suhu - riil) * 100;
   riil += readEEPROM (2, BIT_PANJANG);
-  dmd.selectFont(minimalis);
+  dmd.selectFont(Comic_Sans_MS_Custom_13);
   sprintf(MSG, "%d,%d`C", riil, cacah);
   dmd.drawString(  x, y, MSG , strlen(MSG) , WHITE, BLACK );
-  
 }
 void tampilKelembaban(byte x, byte y)
 {
-  dmd.selectFont(minimalis);
+  dmd.selectFont(Comic_Sans_MS_Custom_13);
   sprintf(MSG, "%d%%", DHTLembab);
   dmd.drawString(  x, y, MSG , strlen(MSG) , WHITE, BLACK );
 }
+
+///###################################################################
+void drawTextClockSmall(byte x_pos, byte y_pos)
+{
+  if (hour<10){
+    sprintf(MSG, "0%d",hour);
+  } else {
+    sprintf(MSG, "%d",hour);
+  }
+
+  if (minute<10){
+    sprintf(MSG, "%s:0%d :",MSG,minute);
+  } else {
+    sprintf(MSG, "%s:%d :",MSG,minute);
+  }
+  dmd.selectFont(angka_2);
+  dmd.drawString(x_pos+1, y_pos, MSG , strlen(MSG) , WHITE, BLACK );
+  //Serial.println(jam);
+  }
+///###################################################################
+
+void drawTextClock(byte x_pos, byte y_pos)
+{
+  //dmd.clearScreen(0);
+
+  if (hour<10){
+    sprintf(MSG, "0%d",hour);
+  } else {
+    sprintf(MSG, "%d",hour);
+  }
+  
+  dmd.selectFont(angka6x13);
+  dmd.drawString(  x_pos+ 3, y_pos, MSG , strlen(MSG) , WHITE, BLACK );
+
+  if (minute<10){
+    sprintf(MSG, "0%d",minute);
+  } else {
+    sprintf(MSG, "%d",minute);
+  }
+
+  dmd.selectFont(Font3x5);
+  dmd.drawString(x_pos+ 22, y_pos , MSG , strlen(MSG) , WHITE, BLACK );
+
+  if (second<10){
+    sprintf(MSG, "0%d",second);
+  } else {
+    sprintf(MSG, "%d",second);
+  }
+
+  dmd.selectFont(Font3x5);
+  dmd.drawString(x_pos+ 22, y_pos +7, MSG , strlen(MSG) , WHITE, BLACK );
+
+  int n;
+  n = second + 1;
+
+  if (n % 2 == 0) {
+
+    dmd.drawFilledBox(x_pos+ 18, y_pos+4, x_pos+19, y_pos+6, BLACK);
+    dmd.drawFilledBox(x_pos+ 18, y_pos+8, x_pos+19, y_pos+10, BLACK);
+  } else {
+    dmd.drawFilledBox(x_pos+ 18, y_pos+4, x_pos+19, y_pos+6, WHITE);
+    dmd.drawFilledBox(x_pos+ 18, y_pos+8, x_pos+19, y_pos+10, WHITE);
+  }
+}
+
+///###################################################################
+
 //####################################################################
 //############# Fungsi menampilkan Scrooling #########################
 void tampilMarque(uint8_t y,uint16_t spd)
@@ -138,7 +204,8 @@ void tampilkanHariTanggal()
 
   sprintf(MSG, " %s, %d %s 20%d", hari[dayOfWeek-1], dayOfMonth, bulanTeks[month-1], year);
 
-  tampilMarque(4,0); // 0 = default (eeprom)
+  dmd.selectFont(Comic_Sans_MS_Custom_13);
+  tampilMarque(0,0); // 0 = default (eeprom)
   menitAkhirAcak = rand() % 9;
   detikAcak = rand() % 59;
 }

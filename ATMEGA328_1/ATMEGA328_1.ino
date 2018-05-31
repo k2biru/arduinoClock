@@ -4,6 +4,13 @@
 #include "Comic_Sans_MS_Custom_13.h"       // Font sedang (Costom ASCII untuk menambahkan simbol derajat (" ` "= derajat)
 #include <DMD.h>                    // Custom DMD library (ditambahkan setingan kecerahan)
 
+
+#include "fonts/SystemFont5x7.h"
+#include "fonts/angka6x13.h"
+#include "fonts/angka_2.h"
+
+
+
 #define DEBUG false                    // debug untuk menampilkan serial (true untuk debug)
 #define BIT_PANJANG true                  // panjang artinya 16 bit
 #define BIT_PENDEK false                  // pendek artinya 8 bit
@@ -108,10 +115,11 @@ void loop() {
   if ((now - last) >= 999 && status == 0) {                 //timmer setiap mendekati 1000
     last = now;
     getDateDS3231(&second, &minute, &hour, &dayOfWeek, &dayOfMonth, &month, &year);
+    /**
     if (menitAkhirAcak2 == (minute % 10) || menitAkhirAcak2 + 3 == (minute % 10))
     {
       tampilSuhu(19, 1);                 // mencetak suhu (lokasi)
-      tampilKelembaban(19, 7);
+      //tampilKelembaban(19, 7);
       if (second == 59)
       {
         menitAkhirAcak2 = rand() % 10;        //variabel acak dari suhu
@@ -126,6 +134,9 @@ void loop() {
       if (minute >= 59 && second >= 59)
         dmd.clearScreen(0 ); // 0 = Black
     }
+    */
+    drawTextClockSmall(0,0);
+    //drawTextClock(0, 0);
   }
   if (menitAkhirAcak == (minute % 10) && detikAcak == second) tampilkanHariTanggal();
 
