@@ -64,6 +64,7 @@ void correctionTemp();
 void staticTextConf();
 void marqueText();
 void weatherRead();
+void staticText(byte x, byte y, byte sec, char text[MAX_ST_TXT]);
 
 
 
@@ -73,6 +74,7 @@ void setup() {
   randomSeed(analogRead(0));
   Serial.begin(2400);                  // serial ESP
   dmdInit();
+  DHTSampling();
   setKecerahan(2000);                         //Set kecerahan
   //Timer1.pwm(PIN_DMD_nOE, 1); //0~1024 [10 16 25 40 65 100 160 250 400 640 1024]
   Wire.begin();
@@ -135,7 +137,12 @@ void loop() {
         dmd.clearScreen(0 ); // 0 = Black
     }
     */
-    drawTextClockSmall(0,0);
+    //dmd.selectFont(SystemFont5x7);
+    //tampilSuhu(19, 1);  
+
+
+    tampilKelembaban(19, 0);
+    //drawTextClockBig(8,0);
     //drawTextClock(0, 0);
   }
   if (menitAkhirAcak == (minute % 10) && detikAcak == second) tampilkanHariTanggal();

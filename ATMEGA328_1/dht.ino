@@ -1,27 +1,29 @@
 #include <SimpleDHT.h>
+#include <TimerOne.h>               // timer 0 untuk DMD
+
 
 # define DHT11_PIN 4
 
 SimpleDHT11 dht11;
+ int err = SimpleDHTErrSuccess;
   
 void DHTSampling()
 {
-  int x;
-  if (counterOne >= 10000 ||(DHTLembab ==0 || DHTSuhu ==0))
-  {
-    //Serial.println("Sampling Data");
-    if (dht11.read(DHT11_PIN, &DHTSuhu, &DHTLembab, NULL)) 
-    {
-    //Serial.println(".");
+  Timer1.detachInterrupt();
+  if ((err = dht11.read(DHT11_PIN, &DHTSuhu, &DHTLembab, NULL)) != SimpleDHTErrSuccess) {
+    Serial.print("Read DHT11 failed, err="); Serial.println(err);delay(1000);
     return;
   }
+  
+  Timer1.attachInterrupt( ScanDMD );
+  /*
     if (DHTLembab >=0 || DHTSuhu >= 0) 
     {
       counterDisplay ++;
       counterOne = 0;
     }
+*/
 
-  }
 
 }
 

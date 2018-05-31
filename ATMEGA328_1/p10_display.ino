@@ -5,7 +5,7 @@
 #define BLACK 0
 
 void dmdInit() {
-  Timer1.initialize( 4000 );              //period in microseconds to call ScanDMD. Anything longer than 5000 (5ms) and you can see flicker.
+  Timer1.initialize( 1000 );              //period in microseconds to call ScanDMD. Anything longer than 5000 (5ms) and you can see flicker.
   Timer1.attachInterrupt( ScanDMD );      //attach the Timer1 interrupt to ScanDMD which goes to dmd.scanDisplayBySPI()
   dmd.clearScreen( true );                //true is normal (all pixels off), false is negative (all pixels on)
   dmd.selectFont(minimalis);
@@ -102,7 +102,7 @@ void tampilSuhu(byte x, byte y)
   byte riil = suhu;
   byte cacah = (suhu - riil) * 100;
   riil += readEEPROM (2, BIT_PANJANG);
-  dmd.selectFont(Comic_Sans_MS_Custom_13);
+  
   sprintf(MSG, "%d,%d`C", riil, cacah);
   dmd.drawString(  x, y, MSG , strlen(MSG) , WHITE, BLACK );
 }
@@ -114,21 +114,34 @@ void tampilKelembaban(byte x, byte y)
 }
 
 ///###################################################################
-void drawTextClockSmall(byte x_pos, byte y_pos)
+void drawTextClockBig(byte x_pos, byte y_pos)
 {
+  dmd.selectFont(angka6x13);
   if (hour<10){
     sprintf(MSG, "0%d",hour);
   } else {
     sprintf(MSG, "%d",hour);
   }
 
-  if (minute<10){
-    sprintf(MSG, "%s:0%d :",MSG,minute);
-  } else {
-    sprintf(MSG, "%s:%d :",MSG,minute);
-  }
-  dmd.selectFont(angka_2);
   dmd.drawString(x_pos+1, y_pos, MSG , strlen(MSG) , WHITE, BLACK );
+  
+  dmd.drawFilledBox(x_pos+ 16, y_pos+4, x_pos+17, y_pos+6, WHITE);
+  dmd.drawFilledBox(x_pos+ 16, y_pos+8, x_pos+17, y_pos+10, WHITE);
+
+  if (minute<10){
+    sprintf(MSG, "0%d",minute);
+  } else {
+    sprintf(MSG, "%d",minute);
+  }
+  dmd.drawString(x_pos+ 20, y_pos, MSG , strlen(MSG) , WHITE, BLACK );
+    if (second<10){
+    sprintf(MSG, ":0%d",second);
+  } else {
+    sprintf(MSG, ":%d",second);
+  }
+
+  dmd.selectFont(Font3x5);
+  dmd.drawString(x_pos+ 36, y_pos , MSG , strlen(MSG) , WHITE, BLACK );
   //Serial.println(jam);
   }
 ///###################################################################
@@ -194,6 +207,7 @@ void tampilMarque(uint8_t y,uint16_t spd)
       timer = millis();
     }
   }
+  DHTSampling();
 }
 //####################################################################
 //############# Fungsi menampilkan hari tanggal ######################
