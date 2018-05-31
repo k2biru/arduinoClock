@@ -32,3 +32,15 @@ void displayClockMini(){
   dmd.clearScreen(0 );
   jamAngka(19, 4);
 }
+
+void displayTemp(){
+  dmd.clearScreen(0 );
+  dmd.selectFont(SystemFont5x7);
+  tampilSuhu(19, 1); 
+}
+
+void displayHum(){
+  dmd.clearScreen(0 );
+  dmd.selectFont(SystemFont5x7);
+  tampilKelembaban(19, 0); 
+}

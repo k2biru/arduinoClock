@@ -15,7 +15,6 @@ void dmdInit() {
 void ScanDMD()
 {
   dmd.scanDisplayBySPI();
-  counterOne++;
 }
 
 //############# Fungsi Kecerahan DMD #################################
@@ -84,14 +83,24 @@ void runClockBox(byte LOKASI_JAM_X, byte LOKASI_JAM_Y)
 //################# Fungsi menampilkan jam tulisan ###################
 void jamAngka(byte x, byte y)
 {
-  char JAM [2], MENIT [2], DETIK [2];
   dmd.selectFont(minimalis);
 
   if (hour == 0)hour = 24;
-  if (hour < 10)sprintf(JAM, "0%d", hour); else sprintf(JAM, "%d", hour);
-  if (minute < 10)sprintf(MENIT, "0%d", minute); else sprintf(MENIT, "%d", minute);
-  if (second < 10)sprintf(DETIK, "0%d", second); else sprintf(DETIK, "%d", second);
-  sprintf(MSG, "%s:%s:%s  " , JAM, MENIT, DETIK);
+   if (hour<10){
+    sprintf(MSG, "0%d",hour);
+  } else {
+    sprintf(MSG, "%d",hour);
+  }
+  if (minute<10){
+    sprintf(MSG, "%s:0%d",MSG,minute);
+  } else {
+    sprintf(MSG, "%s:%d",MSG,minute);
+  }
+  if (second<10){
+    sprintf(MSG, "%s:0%d",MSG,second);
+  } else {
+    sprintf(MSG, "%s:%d",MSG,second);
+  }
   dmd.drawString(  x, y, MSG , strlen(MSG) , WHITE, BLACK );
 }
 //####################################################################
@@ -207,6 +216,7 @@ void tampilMarque(uint8_t y,uint16_t spd)
     }
   }
   DHTSampling();
+  disp= rand() % 7;
 }
 //####################################################################
 //############# Fungsi menampilkan hari tanggal ######################
@@ -219,8 +229,6 @@ void tampilkanHariTanggal()
 
   dmd.selectFont(Comic_Sans_MS_Custom_13);
   tampilMarque(0,0); // 0 = default (eeprom)
-  menitAkhirAcak = rand() % 9;
-  detikAcak = rand() % 59;
 }
 //####################################################################
 //##################### Menampilkan static text ######################

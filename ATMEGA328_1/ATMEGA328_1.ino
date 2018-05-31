@@ -24,11 +24,11 @@
 char status, MSG[MAX_SERIAL];
 float suhu;
 uint8_t DHTLembab, DHTSuhu;
-byte counterDisplay, second, minute, hour, dayOfWeek, dayOfMonth, month, year;
-byte menitAkhirAcak = rand() % 9, detikAcak = rand() % 59;
-byte menitAkhirAcak2 = rand() % 9;                              // untuk menampilkan suhu
+byte second, minute, hour, dayOfWeek, dayOfMonth, month, year;
+byte disp, menitAkhirAcak = rand() % 9, detikAcak = rand() % 59;
+byte menitAkhirAcak2 = rand() % 9;                             
 
-unsigned long last , counterOne = 0 ;
+unsigned long last  ;
 DMD dmd(DISPLAYS_ACROSS, DISPLAYS_DOWN, 1);
 
 //####################################################################
@@ -78,7 +78,6 @@ void setup() {
   setKecerahan(2000);                         //Set kecerahan
   //Timer1.pwm(PIN_DMD_nOE, 1); //0~1024 [10 16 25 40 65 100 160 250 400 640 1024]
   Wire.begin();
-  suhu = getTemp3231Celcius();              // sampling suhu
   //setDateDS3231(0, 44, 19, 2, 2, 1, 17);
   dmd.clearScreen(0);
   getDateDS3231(&second, &minute, &hour, &dayOfWeek, &dayOfMonth, &month, &year);
@@ -86,10 +85,10 @@ void setup() {
   staticText(4, 1, 99, "Yozora v1.1");
   staticText(15, 7, 92, "Langit Malam");
   digitalWrite(3, LOW);
-  //dmd.setBufferEdit(2);
   tampilkanHariTanggal();
   dmd.clearScreen(0 ); // 0 = Black
   //setDateDS3231(second, minute, hour, 6, dayOfMonth, month, year);
+  disp= rand() % 10;
 
 }
 
@@ -111,41 +110,56 @@ void loop() {
     if (status != 'm')status = 0;
   }
 
-  if (minute == 0 && second == 0)digitalWrite(3, HIGH); else digitalWrite(3, LOW);
-  //DHTSampling();
+  if (minute == 0 && second == 0)digitalWrite(3, HIGH); else digitalWrite(3, LOW); // Buzzer
+
   unsigned long now = millis();
   if ((now - last) >= 999 && status == 0) {                 //timmer setiap mendekati 1000
     last = now;
     getDateDS3231(&second, &minute, &hour, &dayOfWeek, &dayOfMonth, &month, &year);
-    /**
-    if (menitAkhirAcak2 == (minute % 10) || menitAkhirAcak2 + 3 == (minute % 10))
+
+    if (hour >= 21 || hour<4)
     {
-      tampilSuhu(19, 1);                 // mencetak suhu (lokasi)
-      //tampilKelembaban(19, 7);
-      if (second == 59)
+    displayClockMini();
+    } else {
+
+      if (menitAkhirAcak2 == (minute % 10) && second == detikAcak)
       {
-        menitAkhirAcak2 = rand() % 10;        //variabel acak dari suhu
-        dmd.clearScreen(0);
+       disp= rand() % 7;
+       menitAkhirAcak2 = rand() % 9;
       }
+ 
+//displayClockMini();
+//displayClockSqrAndMini();
+
+      if (disp=0){ displayClockSqrTemp();
+      } else if (disp=1){ displayClockMini();
+      } else if (disp=2){ displayClockSqrHum();
+      } else if (disp=3){ displayClockBig();
+      } else if (disp=4){ displayClockMid();
+      } else if (disp=5){ displayTemp();
+      } else if (disp=6){ displayHum();
+      } else { displayClockSqrAndMini();
+      }
+
+      
+      Serial.println(disp);
+ 
+    
     }
-    //if (counterDisplay%3==0)
-    else jamAngka(19, 4);                       // mencetak jam angka (lokasi)
-    if (hour <= 21)
-    {
-      runClockBox(0, 0);                          // mencetak jam kotak (lokasi)
-      if (minute >= 59 && second >= 59)
-        dmd.clearScreen(0 ); // 0 = Black
-    }
-    */
     //dmd.selectFont(SystemFont5x7);
     //tampilSuhu(19, 1);  
-
-displayClockSqrAndMini();
+    //displayClockSqrAndMini();
     //tampilKelembaban(19, 0);
     //drawTextClockBig(8,0);
     //drawTextClock(0, 0);
   }
-  if (menitAkhirAcak == (minute % 10) && detikAcak == second) tampilkanHariTanggal();
+  
+  if (menitAkhirAcak == (minute % 10) && detikAcak == second) 
+  {
+    tampilkanHariTanggal();
+    menitAkhirAcak = rand() % 9;
+    detikAcak = rand() % 59;
+  }
 
 
 }
