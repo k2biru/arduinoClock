@@ -108,7 +108,6 @@ void tampilSuhu(byte x, byte y)
 }
 void tampilKelembaban(byte x, byte y)
 {
-  dmd.selectFont(Comic_Sans_MS_Custom_13);
   sprintf(MSG, "%d%%", DHTLembab);
   dmd.drawString(  x, y, MSG , strlen(MSG) , WHITE, BLACK );
 }

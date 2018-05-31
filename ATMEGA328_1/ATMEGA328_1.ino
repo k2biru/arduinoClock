@@ -140,8 +140,8 @@ void loop() {
     //dmd.selectFont(SystemFont5x7);
     //tampilSuhu(19, 1);  
 
-
-    tampilKelembaban(19, 0);
+displayClockSqrAndMini();
+    //tampilKelembaban(19, 0);
     //drawTextClockBig(8,0);
     //drawTextClock(0, 0);
   }
