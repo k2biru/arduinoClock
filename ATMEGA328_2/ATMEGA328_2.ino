@@ -98,7 +98,7 @@ void loop() {
     status = serialRead();
     if (status == 'C') setClock();
     else if (status == 'D') setDate();
-    else if (status == 'B') setBrighness();
+    else if (status == 'B') { setBrighness();  once = false;}
     else if (status == 'S') setMarq();
     else if (status == 'T') correctionTemp();
     else if (status == 'm') staticTextConf();

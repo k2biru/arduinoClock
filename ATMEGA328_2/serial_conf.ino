@@ -70,7 +70,7 @@ void setBrighness()
   unsigned int brighness;
   for (byte i = 0; i < 4; i++) X[i] = MSG[2 + i];
   brighness = atoi(X);
-  sprintf(MSG, "Brighness :%d", brighness);
+  sprintf(MSG, "Brighness :%d%%", 100*brighness/1024);
   staticText(5, 4, 1, MSG);
   //Serial.print("Set brigh :"); Serial.println(brighness);
   setKecerahan(brighness);
