@@ -25,8 +25,8 @@ char status, MSG[MAX_SERIAL];
 float suhu;
 uint8_t DHTLembab, DHTSuhu;
 byte second, minute, hour, dayOfWeek, dayOfMonth, month, year;
-byte disp=rand() % 25, menitAkhirAcak = rand() % 9, detikAcak = rand() % 59;
-byte menitAkhirAcak2 = rand() % 9;                             
+byte disp = rand() % 9, menitAkhirAcak = rand() % 9, detikAcak = rand() % 59;
+byte menitAkhirAcak2 = rand() % 9;
 
 unsigned long last  ;
 DMD dmd(DISPLAYS_ACROSS, DISPLAYS_DOWN, 1);
@@ -87,7 +87,7 @@ void setup() {
   tampilkanHariTanggal();
   dmd.clearScreen(0 ); // 0 = Black
   //setDateDS3231(second, minute, hour, 6, dayOfMonth, month, year);
-  
+
 }
 
 void loop() {
@@ -111,51 +111,84 @@ void loop() {
     last = now;
     getDateDS3231(&second, &minute, &hour, &dayOfWeek, &dayOfMonth, &month, &year);
 
-    if (hour >= 21 || hour<4)
+    if (hour >= 21 || hour < 4)
     {
-    displayClockMini();
+      displayClockMini();
     } else {
-
       if (menitAkhirAcak2 == (minute % 10) && second == detikAcak)
       {
-       disp= rand() % 7;
-       menitAkhirAcak2 = rand() % 15;
-       dmd.clearScreen(0 );
+        disp = rand() % 7;
+        if (disp == 0) {
+          //displayClockSqrAndMini();
+          menitAkhirAcak2 = rand() % 9;
+        } else if (disp == 1) {
+          //displayClockBig();
+          menitAkhirAcak2 = rand() % 9;
+        } else if (disp == 2) {
+          //displayClockMid();
+          menitAkhirAcak2 = rand() % 9;
+        } else if (disp == 3) {
+          //displayClockSqrHum();
+          if (((minute % 10)+1)<10)  menitAkhirAcak2 = (minute % 10)+1;
+          else menitAkhirAcak2 = 0;
+        } else if (disp == 4) {
+          //displayClockSqrTemp();
+          if (((minute % 10)+1)<10)  menitAkhirAcak2 = (minute % 10)+1;
+          else menitAkhirAcak2 = 0;
+        } else if (disp == 5) {
+          //displayTemp();
+          if (((minute % 10)+1)<10)  menitAkhirAcak2 = (minute % 10)+1;
+          else menitAkhirAcak2 = 0;
+        } else if (disp == 6) {
+          //displayHum();
+          if (((minute % 10)+1)<10)  menitAkhirAcak2 = (minute % 10)+1;
+          else menitAkhirAcak2 = 0;
+        } else if (disp == 7) {
+          //displayClockMini();
+          if (((minute % 10)+1)<10)  menitAkhirAcak2 = (minute % 10)+1;
+          else menitAkhirAcak2 = 0;
+        } else {
+          //disp = 1;
+          menitAkhirAcak2 = rand() % 9;
+        }
+        dmd.clearScreen(0 );
       }
-      
- 
-//displayClockMini();
-//displayClockSqrAndMini();
 
-Serial.println(disp);
-      if (disp==0){ 
-        displayClockSqrTemp();
-      } else if (disp==1){
-        displayTemp();
-      } else if (disp==2){
-        displayClockSqrHum();
-      } else if (disp==3){
-        displayClockBig();
-      } else if (disp==4){
-        displayClockMid();
-      } else if (disp==5){
-        displayHum();
-      } else if (disp==6){
-        displayClockMini();
-      } else { 
+
+      //displayClockMini();
+      //displayClockSqrAndMini();
+
+      Serial.println(disp);
+      if (disp == 0) {
         displayClockSqrAndMini();
-      }    
+      } else if (disp == 1) {
+        displayClockBig();
+      } else if (disp == 2) {
+        displayClockMid();
+      } else if (disp == 3) {
+        displayClockSqrHum();
+      } else if (disp == 4) {
+        displayClockSqrTemp();
+      } else if (disp == 5) {
+        displayTemp();
+      } else if (disp == 6) {
+        displayHum();
+      } else if (disp == 7) {
+        displayClockMini();
+      } else {
+        disp = 1;
+      }
     }
-    
+
     //dmd.selectFont(SystemFont5x7);
-    //tampilSuhu(19, 1);  
+    //tampilSuhu(19, 1);
     //displayClockSqrAndMini();
     //tampilKelembaban(19, 0);
     //drawTextClockBig(8,0);
     //drawTextClock(0, 0);
   }
-  
-  if (menitAkhirAcak == (minute % 10) && detikAcak == second) 
+
+  if (menitAkhirAcak == (minute % 10) && detikAcak == second)
   {
     tampilkanHariTanggal();
     menitAkhirAcak = rand() % 9;
