@@ -1,4 +1,4 @@
-#include <EEPROM.h>  
+#include <EEPROM.h>
 
 //############# Fungsi memulis data ke EEPROM ########################
 void updateEEPROM (unsigned int alamat, unsigned int data, boolean panjang)

@@ -8,6 +8,7 @@
 #include "fonts/SystemFont5x7.h"
 #include "fonts/angka6x13.h"
 #include "fonts/angka_2.h"
+#include <TimerOne.h>               // timer 0 untuk DMD
 
 
 
@@ -25,8 +26,9 @@ char status, MSG[MAX_SERIAL];
 float suhu;
 uint8_t DHTLembab, DHTSuhu;
 byte second, minute, hour, dayOfWeek, dayOfMonth, month, year;
-byte disp = rand() % 9, menitAkhirAcak = rand() % 9, detikAcak = rand() % 59;
-byte menitAkhirAcak2 = rand() % 9;
+byte disp = 8, menitAkhirAcak = 2, detikAcak = 20;
+byte menitAkhirAcak2 = 2;
+boolean once = false;
 
 unsigned long last  ;
 DMD dmd(DISPLAYS_ACROSS, DISPLAYS_DOWN, 1);
@@ -87,7 +89,6 @@ void setup() {
   tampilkanHariTanggal();
   dmd.clearScreen(0 ); // 0 = Black
   //setDateDS3231(second, minute, hour, 6, dayOfMonth, month, year);
-
 }
 
 void loop() {
@@ -111,13 +112,18 @@ void loop() {
     last = now;
     getDateDS3231(&second, &minute, &hour, &dayOfWeek, &dayOfMonth, &month, &year);
 
-    if (hour >= 21 || hour < 4)
+    if (hour >= 22 || hour < 4)
     {
+      if (!once) {
+        dmd.clearScreen(0);
+        Timer1.pwm(PIN_DMD_nOE, 15);
+        once = true;
+      }
       displayClockMini();
     } else {
       if (menitAkhirAcak2 == (minute % 10) && second == detikAcak)
       {
-        disp = rand() % 7;
+        disp = rand() % 11;
         if (disp == 0) {
           //displayClockSqrAndMini();
           menitAkhirAcak2 = rand() % 9;
@@ -129,24 +135,43 @@ void loop() {
           menitAkhirAcak2 = rand() % 9;
         } else if (disp == 3) {
           //displayClockSqrHum();
-          if (((minute % 10)+1)<10)  menitAkhirAcak2 = (minute % 10)+1;
+          if (((minute % 10) + 1) < 10)  menitAkhirAcak2 = (minute % 10) + 1;
           else menitAkhirAcak2 = 0;
         } else if (disp == 4) {
           //displayClockSqrTemp();
-          if (((minute % 10)+1)<10)  menitAkhirAcak2 = (minute % 10)+1;
+          if (((minute % 10) + 1) < 10)  menitAkhirAcak2 = (minute % 10) + 1;
           else menitAkhirAcak2 = 0;
         } else if (disp == 5) {
           //displayTemp();
-          if (((minute % 10)+1)<10)  menitAkhirAcak2 = (minute % 10)+1;
-          else menitAkhirAcak2 = 0;
+          if ((detikAcak + 5 ) <= 59)  detikAcak += 5;
+          else {
+            (detikAcak + 5) - 59;
+            if (((minute % 10) + 1) < 10)  menitAkhirAcak2 = (minute % 10) + 1;
+            else menitAkhirAcak2 = 0;
+          }
         } else if (disp == 6) {
           //displayHum();
-          if (((minute % 10)+1)<10)  menitAkhirAcak2 = (minute % 10)+1;
-          else menitAkhirAcak2 = 0;
+          if ((detikAcak + 5 ) <= 59)  detikAcak += 5;
+          else {
+            (detikAcak + 5) - 59;
+            if (((minute % 10) + 1) < 10)  menitAkhirAcak2 = (minute % 10) + 1;
+            else menitAkhirAcak2 = 0;
+          }
         } else if (disp == 7) {
           //displayClockMini();
-          if (((minute % 10)+1)<10)  menitAkhirAcak2 = (minute % 10)+1;
+          if (((minute % 10) + 1) < 10)  menitAkhirAcak2 = (minute % 10) + 1;
           else menitAkhirAcak2 = 0;
+        } else if (disp == 8) {
+          //displayDateBig();
+          if ((detikAcak + 15 ) <= 59)  detikAcak += 15;
+          else {
+            (detikAcak + 15) - 59;
+            if (((minute % 10) + 1) < 10)  menitAkhirAcak2 = (minute % 10) + 1;
+            else menitAkhirAcak2 = 0;
+          }
+        } else if (disp == 9) {
+          //displayClockDateBig();
+          menitAkhirAcak2 = rand() % 9;
         } else {
           //disp = 1;
           menitAkhirAcak2 = rand() % 9;
@@ -155,10 +180,9 @@ void loop() {
       }
 
 
-      //displayClockMini();
-      //displayClockSqrAndMini();
+      once = false;
+      setKecerahan(2000);
 
-      Serial.println(disp);
       if (disp == 0) {
         displayClockSqrAndMini();
       } else if (disp == 1) {
@@ -175,17 +199,14 @@ void loop() {
         displayHum();
       } else if (disp == 7) {
         displayClockMini();
+      } else if (disp == 8) {
+        displayDateBig();
+      } else if (disp == 9) {
+        displayClockDateBig();
       } else {
         disp = 1;
       }
     }
-
-    //dmd.selectFont(SystemFont5x7);
-    //tampilSuhu(19, 1);
-    //displayClockSqrAndMini();
-    //tampilKelembaban(19, 0);
-    //drawTextClockBig(8,0);
-    //drawTextClock(0, 0);
   }
 
   if (menitAkhirAcak == (minute % 10) && detikAcak == second)

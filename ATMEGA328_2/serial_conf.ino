@@ -74,7 +74,7 @@ void setBrighness()
   staticText(5, 4, 1, MSG);
   //Serial.print("Set brigh :"); Serial.println(brighness);
   setKecerahan(brighness);
-  staticText(5, 4, 1, MSG); 
+  staticText(5, 4, 1, MSG);
 }
 
 void setMarq()
@@ -89,7 +89,7 @@ void setMarq()
   staticText(13, 4, 0, MSG); // 99 = no timer, no black after, black before
   sprintf(MSG, "%d", marq);
   dmd.selectFont(Comic_Sans_MS_Custom_13);
-  tampilMarque(0,0);
+  tampilMarque(0, 0);
   //Serial.print("Set Marque :"); Serial.println(marq);
 }
 
@@ -104,14 +104,12 @@ void correctionTemp()
   staticText(10, 0, 98, MSG); // blank
   tampilSuhu(22, 9);
   sprintf(MSG, "T.Correc : %d", tCorrect);
-  staticText(10,0, 95, MSG);
-
-  //Serial.print("Temp Correction :"); Serial.println(tCorrect);
+  staticText(10, 0, 95, MSG);
 }
 
 void staticTextConf()
 {
-  byte Z[2],i;
+  byte Z[2], i;
   byte x, y, sec;
   Z[0] = MSG[2];
   Z[1] = MSG[3];
@@ -122,47 +120,43 @@ void staticTextConf()
   Z[0] = MSG[6];
   Z[1] = MSG[7];
   sec = atoi(Z);
-  
-    
-   for( i=0;i< 40;i++)
+
+
+  for ( i = 0; i < 40; i++)
   {
-    MSG[i]=MSG[i+8];
+    MSG[i] = MSG[i + 8];
   }
-  //Serial.print("Static Txt :"); Serial.print(x);Serial.print(y); Serial.println(sec);
-  //Serial.print("text :");Serial.println(MSG);
-  staticText(x, y,sec, MSG);
+  staticText(x, y, sec, MSG);
 
 }
 
 void marqueText()
 {
-  byte X[6],i,x;
+  byte X[6], i, x;
   unsigned int speed;
   for (i = 0; i < 2; i++) X[i] = MSG[3 + i];
-  speed = atoi(X)*10;
-  if (MSG[2]=='S')
+  speed = atoi(X) * 10;
+  if (MSG[2] == 'S')
   {
     dmd.selectFont(minimalis);
-    x=4;
+    x = 4;
   }
-  else if (MSG[2]=='B')
+  else if (MSG[2] == 'B')
   {
     dmd.selectFont(Comic_Sans_MS_Custom_13);
-    x=0;
+    x = 0;
   }
-  else if (MSG[2]=='M')
+  else if (MSG[2] == 'M')
   {
     dmd.selectFont(Comic_Sans_MS_Custom_13);
-    x=0;
+    x = 0;
   }
-  
-   for( i=0;i< MAX_SERIAL-8;i++)
+
+  for ( i = 0; i < MAX_SERIAL - 8; i++)
   {
-    MSG[i]=MSG[i+5];
+    MSG[i] = MSG[i + 5];
   }
-  //Serial.print("Marque Txt Speed :"); Serial.println(speed);
-  //Serial.print("text :");Serial.println(MSG);
-  tampilMarque(x,speed);
+  tampilMarque(x, speed);
 }
 
 

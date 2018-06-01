@@ -21,10 +21,10 @@ void ScanDMD()
 
 void setKecerahan(unsigned int brighness)
 {
-   if (brighness >=1025) brighness = readEEPROM (0, BIT_PANJANG);                                 // baca EEPROM di alamat 0 ,16bit data
+  if (brighness >= 1025) brighness = readEEPROM (0, BIT_PANJANG);                                // baca EEPROM di alamat 0 ,16bit data
   else
   {
-   if (brighness != 0 || brighness >= 1020)brighness = fscale( 1, 1024, 1, 1024, brighness, -5);    // merubah skala dari linier ke logaritmik
+    if (brighness != 0 || brighness >= 1020)brighness = fscale( 1, 1024, 1, 1024, brighness, -5);    // merubah skala dari linier ke logaritmik
   }
   //terang=100;
   updateEEPROM (0, brighness, BIT_PANJANG);                                                 // update EEPROM di alamat 0 ,16bit data
@@ -38,7 +38,7 @@ void setKecerahan(unsigned int brighness)
 void runClockBox(byte LOKASI_JAM_X, byte LOKASI_JAM_Y)
 // draws the hour hand
 {
-  
+
   const byte x_secMin [] = {8, 9, 10, 11, 12, 13, 14, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 14, 13, 12, 11, 10, 9, 8,   7, 6, 5, 4, 3,      2, 1, 0, 0, 0,      0, 0, 0, 0, 0,    0, 0, 0, 0, 0,  0, 0, 0, 1, 2,  3, 4, 5, 6, 7};
   const byte y_secMin [] = {0, 0, 0, 0, 0,    0, 0, 0, 1, 2,      3, 4, 5, 6, 7,      8, 9, 10, 11, 12,   13, 14, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3,  2, 1, 0, 0, 0,  0, 0, 0, 0, 0};
   byte x_hour [] = {0, 11, 11, 11, 11, 9, 7, 4, 4, 4, 4, 6, 7};
@@ -85,20 +85,20 @@ void jamAngka(byte x, byte y)
   dmd.selectFont(minimalis);
 
   if (hour == 0)hour = 24;
-   if (hour<10){
-    sprintf(MSG, "0%d",hour);
+  if (hour < 10) {
+    sprintf(MSG, "0%d", hour);
   } else {
-    sprintf(MSG, "%d",hour);
+    sprintf(MSG, "%d", hour);
   }
-  if (minute<10){
-    sprintf(MSG, "%s:0%d",MSG,minute);
+  if (minute < 10) {
+    sprintf(MSG, "%s:0%d", MSG, minute);
   } else {
-    sprintf(MSG, "%s:%d",MSG,minute);
+    sprintf(MSG, "%s:%d", MSG, minute);
   }
-  if (second<10){
-    sprintf(MSG, "%s:0%d",MSG,second);
+  if (second < 10) {
+    sprintf(MSG, "%s:0%d", MSG, second);
   } else {
-    sprintf(MSG, "%s:%d",MSG,second);
+    sprintf(MSG, "%s:%d", MSG, second);
   }
   dmd.drawString(  x, y, MSG , strlen(MSG) , WHITE, BLACK );
 }
@@ -110,9 +110,9 @@ void tampilSuhu(byte x, byte y)
   byte riil = suhu;
   byte cacah = (suhu - riil) * 100;
   //riil += readEEPROM (2, BIT_PANJANG);
-  
+
   //sprintf(MSG, "%d,%d`C", riil, cacah);
-  sprintf(MSG, "%d,%d`C", riil,cacah);
+  sprintf(MSG, "%d,%d`C", riil, cacah);
   //Serial.println(MSG);
   dmd.drawString(  x, y, MSG , strlen(MSG) , WHITE, BLACK );
 }
@@ -123,79 +123,80 @@ void tampilKelembaban(byte x, byte y)
 }
 
 ///###################################################################
+
 void drawTextClockBig(byte x_pos, byte y_pos)
 {
   dmd.selectFont(angka6x13);
-  if (hour<10){
-    sprintf(MSG, "0%d",hour);
+  if (hour < 10) {
+    sprintf(MSG, "0%d", hour);
   } else {
-    sprintf(MSG, "%d",hour);
+    sprintf(MSG, "%d", hour);
   }
 
-  dmd.drawString(x_pos+1, y_pos, MSG , strlen(MSG) , WHITE, BLACK );
-  
-  dmd.drawFilledBox(x_pos+ 16, y_pos+4, x_pos+17, y_pos+6, WHITE);
-  dmd.drawFilledBox(x_pos+ 16, y_pos+8, x_pos+17, y_pos+10, WHITE);
+  dmd.drawString(x_pos + 1, y_pos, MSG , strlen(MSG) , WHITE, BLACK );
 
-  if (minute<10){
-    sprintf(MSG, "0%d",minute);
+  dmd.drawFilledBox(x_pos + 16, y_pos + 4, x_pos + 17, y_pos + 6, WHITE);
+  dmd.drawFilledBox(x_pos + 16, y_pos + 8, x_pos + 17, y_pos + 10, WHITE);
+
+  if (minute < 10) {
+    sprintf(MSG, "0%d", minute);
   } else {
-    sprintf(MSG, "%d",minute);
+    sprintf(MSG, "%d", minute);
   }
-  dmd.drawString(x_pos+ 20, y_pos, MSG , strlen(MSG) , WHITE, BLACK );
-    if (second<10){
-    sprintf(MSG, ":0%d",second);
+  dmd.drawString(x_pos + 20, y_pos, MSG , strlen(MSG) , WHITE, BLACK );
+  if (second < 10) {
+    sprintf(MSG, ":0%d", second);
   } else {
-    sprintf(MSG, ":%d",second);
+    sprintf(MSG, ":%d", second);
   }
 
   dmd.selectFont(Font3x5);
-  dmd.drawString(x_pos+ 36, y_pos , MSG , strlen(MSG) , WHITE, BLACK );
+  dmd.drawString(x_pos + 36, y_pos , MSG , strlen(MSG) , WHITE, BLACK );
   //Serial.println(jam);
-  }
+}
 ///###################################################################
 
 void drawTextClock(byte x_pos, byte y_pos)
 {
   //dmd.clearScreen(0);
 
-  if (hour<10){
-    sprintf(MSG, "0%d",hour);
+  if (hour < 10) {
+    sprintf(MSG, "0%d", hour);
   } else {
-    sprintf(MSG, "%d",hour);
+    sprintf(MSG, "%d", hour);
   }
-  
+
   dmd.selectFont(angka6x13);
-  dmd.drawString(  x_pos+ 3, y_pos, MSG , strlen(MSG) , WHITE, BLACK );
+  dmd.drawString(  x_pos + 3, y_pos, MSG , strlen(MSG) , WHITE, BLACK );
 
-  if (minute<10){
-    sprintf(MSG, "0%d",minute);
+  if (minute < 10) {
+    sprintf(MSG, "0%d", minute);
   } else {
-    sprintf(MSG, "%d",minute);
+    sprintf(MSG, "%d", minute);
   }
 
   dmd.selectFont(Font3x5);
-  dmd.drawString(x_pos+ 22, y_pos , MSG , strlen(MSG) , WHITE, BLACK );
+  dmd.drawString(x_pos + 22, y_pos , MSG , strlen(MSG) , WHITE, BLACK );
 
-  if (second<10){
-    sprintf(MSG, "0%d",second);
+  if (second < 10) {
+    sprintf(MSG, "0%d", second);
   } else {
-    sprintf(MSG, "%d",second);
+    sprintf(MSG, "%d", second);
   }
 
   dmd.selectFont(Font3x5);
-  dmd.drawString(x_pos+ 22, y_pos +7, MSG , strlen(MSG) , WHITE, BLACK );
+  dmd.drawString(x_pos + 22, y_pos + 7, MSG , strlen(MSG) , WHITE, BLACK );
 
   int n;
   n = second + 1;
 
   if (n % 2 == 0) {
 
-    dmd.drawFilledBox(x_pos+ 18, y_pos+4, x_pos+19, y_pos+6, BLACK);
-    dmd.drawFilledBox(x_pos+ 18, y_pos+8, x_pos+19, y_pos+10, BLACK);
+    dmd.drawFilledBox(x_pos + 18, y_pos + 4, x_pos + 19, y_pos + 6, BLACK);
+    dmd.drawFilledBox(x_pos + 18, y_pos + 8, x_pos + 19, y_pos + 10, BLACK);
   } else {
-    dmd.drawFilledBox(x_pos+ 18, y_pos+4, x_pos+19, y_pos+6, WHITE);
-    dmd.drawFilledBox(x_pos+ 18, y_pos+8, x_pos+19, y_pos+10, WHITE);
+    dmd.drawFilledBox(x_pos + 18, y_pos + 4, x_pos + 19, y_pos + 6, WHITE);
+    dmd.drawFilledBox(x_pos + 18, y_pos + 8, x_pos + 19, y_pos + 10, WHITE);
   }
 }
 
@@ -203,13 +204,13 @@ void drawTextClock(byte x_pos, byte y_pos)
 
 //####################################################################
 //############# Fungsi menampilkan Scrooling #########################
-void tampilMarque(uint8_t y,uint16_t spd)
+void tampilMarque(uint8_t y, uint16_t spd)
 {
-  dmd.drawMarquee(MSG, strlen(MSG), (32 * DISPLAYS_ACROSS) - 1,y, WHITE,BLACK);
+  dmd.drawMarquee(MSG, strlen(MSG), (32 * DISPLAYS_ACROSS) - 1, y, WHITE, BLACK);
   long start = millis();
   long timer = start;
   boolean ret = false;
-  if (spd==0) spd = readEEPROM (3, BIT_PANJANG);
+  if (spd == 0) spd = readEEPROM (3, BIT_PANJANG);
   while (!ret) {
     if ((timer + spd) < millis()) {
       ret = dmd.stepMarquee(-1, 0);
@@ -217,7 +218,7 @@ void tampilMarque(uint8_t y,uint16_t spd)
     }
   }
   DHTSampling();
-  disp= rand() % 7;
+  disp = rand() % 7;
 }
 //####################################################################
 //############# Fungsi menampilkan hari tanggal ######################
@@ -226,39 +227,53 @@ void tampilkanHariTanggal()
   char hari[][7] = {"Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"};
   char bulanTeks[][9] = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
 
-  sprintf(MSG, " %s, %d %s 20%d", hari[dayOfWeek-1], dayOfMonth, bulanTeks[month-1], year);
+  sprintf(MSG, " %s, %d %s 20%d", hari[dayOfWeek - 1], dayOfMonth, bulanTeks[month - 1], year);
 
   dmd.selectFont(Comic_Sans_MS_Custom_13);
-  tampilMarque(0,0); // 0 = default (eeprom)
+  tampilMarque(0, 0); // 0 = default (eeprom)
 }
-//####################################################################
+
+//##################### Menampilkan static text ######################
+void drawDateTextBig(byte x, byte y)
+{
+  char bulanTeks[][9] = {"JAN", "FEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGT", "SEP", "OKT", "NOV", "DES"};
+  dmd.selectFont(angka6x13);
+  sprintf(MSG, "%d",  dayOfMonth);
+  dmd.drawString(  x + 0, y, MSG , strlen(MSG) , WHITE, BLACK );
+  dmd.selectFont(SystemFont5x7);
+  sprintf(MSG, "%s", bulanTeks[month - 1]);
+  dmd.drawString(  x + 17, y, MSG , strlen(MSG) , WHITE, BLACK );
+  sprintf(MSG, "20%d",  year);
+  dmd.drawString(  x + 15, y + 9, MSG , strlen(MSG) , WHITE, BLACK );
+  //dmd.drawLine( x+32, y, x+26, y+15, WHITE );
+}
 //##################### Menampilkan static text ######################
 void staticText(byte x, byte y, byte sec, char text[MAX_ST_TXT])
 {
   /*
-   * sec = delay in second
-   * 
-   * sec = 99 || 0 (cleanscreen and  no hold)
-   * sec = 97 (no hold wihout clean before)
-   * sec = 98 (clean up and reset)
-   * sec = 91~97 (no clean, hold in sec (hold = sec -90)[ hold 1 sec = 91]
-   * sec < 90 || sec!=0 (cleanscreen , and hold in second)
-   */
-  if (sec>=0 && !(sec>=91&&sec<=97)) dmd.clearScreen(BLACK);
-  dmd.drawString(  x,  y, text, strlen(text), WHITE,BLACK );
-  if(sec>=98) return;
-  else if (sec==98) 
+     sec = delay in second
+
+     sec = 99 || 0 (cleanscreen and  no hold)
+     sec = 97 (no hold wihout clean before)
+     sec = 98 (clean up and reset)
+     sec = 91~97 (no clean, hold in sec (hold = sec -90)[ hold 1 sec = 91]
+     sec < 90 || sec!=0 (cleanscreen , and hold in second)
+  */
+  if (sec >= 0 && !(sec >= 91 && sec <= 97)) dmd.clearScreen(BLACK);
+  dmd.drawString(  x,  y, text, strlen(text), WHITE, BLACK );
+  if (sec >= 98) return;
+  else if (sec == 98)
   {
-    status=0;
+    status = 0;
     return;
   }
-  else if (sec>=1)
+  else if (sec >= 1)
   {
-    if (sec>90) sec -=90;
-    delay (sec*950); 
-    dmd.clearScreen(BLACK); 
-    status=0;
-  } 
+    if (sec > 90) sec -= 90;
+    delay (sec * 950);
+    dmd.clearScreen(BLACK);
+    status = 0;
+  }
 }
 //####################################################################
 
