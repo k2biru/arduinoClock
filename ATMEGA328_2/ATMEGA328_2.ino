@@ -25,7 +25,7 @@ char status, MSG[MAX_SERIAL];
 float suhu;
 uint8_t DHTLembab, DHTSuhu;
 byte second, minute, hour, dayOfWeek, dayOfMonth, month, year;
-byte disp=1, menitAkhirAcak = rand() % 9, detikAcak = rand() % 59;
+byte disp=rand() % 25, menitAkhirAcak = rand() % 9, detikAcak = rand() % 59;
 byte menitAkhirAcak2 = rand() % 9;                             
 
 unsigned long last  ;
@@ -88,7 +88,6 @@ void setup() {
   dmd.clearScreen(0 ); // 0 = Black
   //setDateDS3231(second, minute, hour, 6, dayOfMonth, month, year);
   
-
 }
 
 void loop() {
@@ -106,9 +105,7 @@ void loop() {
     if (status == 'C' || status == 'D' || status == 'M') dmd.clearScreen(0); // 0= black
     if (status != 'm')status = 0;
   }
-
   if (minute == 0 && second == 0)digitalWrite(3, HIGH); else digitalWrite(3, LOW); // Buzzer
-
   unsigned long now = millis();
   if ((now - last) >= 999 && status == 0) {                 //timmer setiap mendekati 1000
     last = now;
@@ -122,22 +119,34 @@ void loop() {
       if (menitAkhirAcak2 == (minute % 10) && second == detikAcak)
       {
        disp= rand() % 7;
-       menitAkhirAcak2 = rand() % 9;
+       menitAkhirAcak2 = rand() % 15;
+       dmd.clearScreen(0 );
       }
+      
  
 //displayClockMini();
 //displayClockSqrAndMini();
 
-      if (disp=0){ displayClockSqrTemp();
-      } else if (disp=1){ displayTemp();
-      } else if (disp=2){ displayClockSqrHum();
-      } else if (disp=3){ displayClockBig();
-      } else if (disp=4){ displayClockMid();
-      } else if (disp=5){ displayClockSqrAndMini();
-      } else if (disp=6){ displayHum();
-      } else { displayClockMini();
+Serial.println(disp);
+      if (disp==0){ 
+        displayClockSqrTemp();
+      } else if (disp==1){
+        displayTemp();
+      } else if (disp==2){
+        displayClockSqrHum();
+      } else if (disp==3){
+        displayClockBig();
+      } else if (disp==4){
+        displayClockMid();
+      } else if (disp==5){
+        displayHum();
+      } else if (disp==6){
+        displayClockMini();
+      } else { 
+        displayClockSqrAndMini();
       }    
     }
+    
     //dmd.selectFont(SystemFont5x7);
     //tampilSuhu(19, 1);  
     //displayClockSqrAndMini();

@@ -107,13 +107,13 @@ void jamAngka(byte x, byte y)
 void tampilSuhu(byte x, byte y)
 {
   suhu = getTemp3231Celcius();
-  //byte riil = suhu;
-  //byte cacah = (suhu - riil) * 100;
+  byte riil = suhu;
+  byte cacah = (suhu - riil) * 100;
   //riil += readEEPROM (2, BIT_PANJANG);
   
   //sprintf(MSG, "%d,%d`C", riil, cacah);
-  sprintf(MSG, "%.2`C", suhu);
-  Serial.println(MSG);
+  sprintf(MSG, "%d,%d`C", riil,cacah);
+  //Serial.println(MSG);
   dmd.drawString(  x, y, MSG , strlen(MSG) , WHITE, BLACK );
 }
 void tampilKelembaban(byte x, byte y)
